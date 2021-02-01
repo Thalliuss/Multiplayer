@@ -1,0 +1,9 @@
+Library/
+obj/
+Logs/
+Packages/
+.vs/
+System.IO.StreamWriter
+*.csproj
+Temp/
+*.sln
