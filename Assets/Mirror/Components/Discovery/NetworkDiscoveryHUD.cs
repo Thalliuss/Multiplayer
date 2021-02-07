@@ -28,7 +28,7 @@ namespace Mirror.Discovery
 
         void OnGUI()
         {
-            if (NetworkManager.singleton == null)
+            if (NetworkManager.Instance == null)
                 return;
 
             if (NetworkServer.active || NetworkClient.active)
@@ -52,7 +52,7 @@ namespace Mirror.Discovery
             if (GUILayout.Button("Start Host"))
             {
                 discoveredServers.Clear();
-                NetworkManager.singleton.StartHost();
+                NetworkManager.Instance.StartHost();
                 networkDiscovery.AdvertiseServer();
             }
 
@@ -60,7 +60,7 @@ namespace Mirror.Discovery
             if (GUILayout.Button("Start Server"))
             {
                 discoveredServers.Clear();
-                NetworkManager.singleton.StartServer();
+                NetworkManager.Instance.StartServer();
 
                 networkDiscovery.AdvertiseServer();
             }
@@ -83,7 +83,7 @@ namespace Mirror.Discovery
 
         void Connect(ServerResponse info)
         {
-            NetworkManager.singleton.StartClient(info.uri);
+            NetworkManager.Instance.StartClient(info.uri);
         }
 
         public void OnDiscoveredServer(ServerResponse info)

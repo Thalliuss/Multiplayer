@@ -159,7 +159,7 @@ namespace Mirror
         /// <summary>
         /// NetworkManager singleton
         /// </summary>
-        public static NetworkManager singleton { get; private set; }
+        public static NetworkManager Instance { get; set; }
 
         /// <summary>
         /// Number of active player objects across all connections on the server.
@@ -712,7 +712,7 @@ namespace Mirror
 
         bool InitializeSingleton()
         {
-            if (singleton != null && singleton == this) return true;
+            if (Instance != null && Instance == this) return true;
 
             // do this early
             LogFilter.Debug = showDebugMessages;
@@ -723,7 +723,7 @@ namespace Mirror
 
             if (dontDestroyOnLoad)
             {
-                if (singleton != null)
+                if (Instance != null)
                 {
                     logger.LogWarning("Multiple NetworkManagers detected in the scene. Only one NetworkManager can exist at a time. The duplicate NetworkManager will be destroyed.");
                     Destroy(gameObject);
@@ -732,13 +732,13 @@ namespace Mirror
                     return false;
                 }
                 logger.Log("NetworkManager created singleton (DontDestroyOnLoad)");
-                singleton = this;
+                Instance = this;
                 if (Application.isPlaying) DontDestroyOnLoad(gameObject);
             }
             else
             {
                 logger.Log("NetworkManager created singleton (ForScene)");
-                singleton = this;
+                Instance = this;
             }
 
             // set active transport AFTER setting singleton.
@@ -786,15 +786,15 @@ namespace Mirror
         /// </summary>
         public static void Shutdown()
         {
-            if (singleton == null)
+            if (Instance == null)
                 return;
 
             startPositions.Clear();
             startPositionIndex = 0;
             clientReadyConnection = null;
 
-            singleton.StopHost();
-            singleton = null;
+            Instance.StopHost();
+            Instance = null;
         }
 
         /// <summary>
@@ -960,10 +960,10 @@ namespace Mirror
 
         static void UpdateScene()
         {
-            if (singleton != null && loadingSceneAsync != null && loadingSceneAsync.isDone)
+            if (Instance != null && loadingSceneAsync != null && loadingSceneAsync.isDone)
             {
                 if (logger.LogEnabled()) logger.Log("ClientChangeScene done readyCon:" + clientReadyConnection);
-                singleton.FinishLoadScene();
+                Instance.FinishLoadScene();
                 loadingSceneAsync.allowSceneActivation = true;
                 loadingSceneAsync = null;
             }
